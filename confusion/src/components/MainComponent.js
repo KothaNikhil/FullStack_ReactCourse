@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Header from './HeaderComponent';
 import Home from './HomeComponent';
-import Contact from './ContactComponent';
+import Contact from './ContactComponent_ReduxForm';
+// import Contact from './ContactComponent';
 import About from './AboutComponent';
 import Footer from './FooterComponent';
 import Menu from './MenuComponent';
