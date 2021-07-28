@@ -1,10 +1,107 @@
-import React from 'react';
-import { Card, CardTitle, CardText, CardImg, CardBody, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import React, {Component} from 'react';
+import { Card, CardTitle, CardText, CardImg, CardBody, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Row, FormGroup, Label, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Control, Errors, LocalForm } from 'react-redux-form';
+
+const required = (val) => (val) && (val.length);
+const minLength = (len) => (val) => val && (val.length>=len);
+const maxLength = (len) => (val) => val && (val.length<=len);
+
+class CommentForm extends Component{
+    constructor(props){
+        super(props);
+        
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+
+        this.state ={
+            isModalOpen: false
+        }
+    }
+
+    toggleModal() {
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
+        });
+    }
+
+    handleSubmit(values){
+        console.log('dsfsg')
+        this.toggleModal();
+        alert(JSON.stringify(values));
+    }
+
+    render() {
+        return(
+            <div>
+                <Button outline onClick={this.toggleModal}>
+                    <span className='fa fa-pencil'> Submit Comment</span>
+                </Button>
+                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+                    <ModalBody>
+                        <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                            <Row className='form-group'>
+                                <Label for='rating' xs={3}>Rating</Label>
+                                <Col xs={9}>
+                                    <Control.select model='.rating' name='rating' id='rating' className='form-control'validators = {{
+                                            required
+                                        }}>
+                                        <option value='1'>1</option>
+                                        <option value='2'>2</option>
+                                        <option value='3'>3</option>
+                                        <option value='4'>4</option>
+                                        <option value='5'>5</option>
+                                    </Control.select>
+                                    <Errors model='.rating' show='touched' className='text-danger'
+                                        messages={{
+                                            required: 'This field is requied.'
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row className='form-group'>
+                                <Label xs={3} htmlFor='yourname'>Your Name</Label>
+                                <Col xs={9}>
+                                    <Control.text model='.yourname' name='yourname' id='yourname' className='form-control' placeholder='Your Name' 
+                                        validators = {{
+                                            required, minLength: minLength(3), maxLength: maxLength(15)
+                                        }}
+                                    />
+                                    <Errors model='.yourname' show='touched' className='text-danger'
+                                        messages={{
+                                            required: 'This field is requied.',
+                                            minLength: '>=3 characters are must',
+                                            maxLength: 'maximum 15 characters.'
+                                        }}
+                                    />
+
+                                </Col>
+                            </Row>
+                            <Row className='form-group'>
+                                <Label xs={3} for='comment'>Comment</Label>
+                                <Col xs={9}>
+                                    <Control.textarea model='.comment' name='comment' id='comment' className='form-control' rows='6' /> 
+                                </Col>
+                            </Row>
+                            <Row className='form-group'>
+                                <Col xs={{size:9, offset:3}}>
+                                    <Button type='submit' color='primary'>Submit</Button>
+                                </Col>
+                            </Row>
+                        </LocalForm>
+                    </ModalBody>
+                </Modal>
+            </div>
+        );
+    }
+
+}
+
 
 function RenderDish({ dish }) {
     return (
-        <Card className='col-12 col-md-5 m-1 mr-4 p-0'>
+        <Card className='p-0'>
             <CardImg width='100%' src={dish.image} alt={dish.name} />
             <CardBody>
                 <CardTitle>{dish.name}</CardTitle>
@@ -26,7 +123,7 @@ function RenderComments({ comments }) {
         });
 
         return (
-            <ul className='list-unstyled col-12 col-md-5 m-1 p-0'>
+            <ul className='list-unstyled p-0'>
                 <h4>Comments</h4>
                 {dishComment}
             </ul>
@@ -54,8 +151,13 @@ const DishDetail = (props) => {
                     </div>
                 </div>
                 <div className='row mt-4'>
-                    <RenderDish dish={props.dish} />
-                    <RenderComments comments={props.comments} />
+                    <div className='col-12 col-md-5 m-1 mr-4'>
+                        <RenderDish dish={props.dish} />
+                    </div>
+                    <div className='col-12 col-md-5 m-1'>
+                        <RenderComments comments={props.comments} />
+                        <CommentForm />
+                    </div>
                 </div>
             </div>
         );
