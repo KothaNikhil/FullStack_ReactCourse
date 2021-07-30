@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron, Modal, ModalBody, ModalHeader, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron, Modal, ModalBody, ModalHeader, Button, Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
 class Header extends Component {
@@ -86,23 +86,39 @@ class Header extends Component {
                     <ModalBody>
                         <Form onSubmit={this.handleLogin}>
                             <FormGroup>
-                                <Label htmlFor="username">Username</Label>
-                                <Input type="text" id="username" name="username"
-                                    innerRef={(input) => this.username = input} />
+                                <Row>
+                                    <Label htmlFor="username" xs={3}>Username</Label>
+                                    <Col xs={9}>
+                                        <Input type="text" id="username" name="username"
+                                            innerRef={(input) => this.username = input} />
+                                    </Col>
+                                </Row>
                             </FormGroup>
                             <FormGroup>
-                                <Label htmlFor="password">Password</Label>
-                                <Input type="password" id="password" name="password"
-                                    innerRef={(input) => this.password = input}  />
+                                <Row>
+                                    <Label htmlFor="password" xs={3}>Password</Label>
+                                    <Col xs={9}>
+                                        <Input type="password" id="password" name="password"
+                                            innerRef={(input) => this.password = input}  />
+                                    </Col>
+                                </Row>
                             </FormGroup>
                             <FormGroup check>
-                                <Label check>
+                                <Row>
+                                <Label check xs={12}>
                                     <Input type="checkbox" name="remember"
                                     innerRef={(input) => this.remember = input}  />
                                     Remember me
                                 </Label>
+                                </Row>
                             </FormGroup>
-                            <Button type="submit" value="submit" color="primary">Login</Button>
+                            <FormGroup>
+                                <Row>
+                                    <Col>
+                                        <Button type="submit" value="submit" color="primary">Login</Button>
+                                    </Col>
+                                </Row>
+                            </FormGroup>
                         </Form>
                     </ModalBody>
                 </Modal>
